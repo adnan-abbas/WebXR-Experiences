@@ -5,17 +5,28 @@
 
 <html>
   <head>
-    <title>Image Gallery WebXR</title>
-    <script src="https://aframe.io/releases/0.7.0/aframe.min.js" ></script>
-    <script src="https://unpkg.com/aframe-template-component@3.x.x/dist/aframe-template-component.min.js"></script>
-    <script src="https://unpkg.com/aframe-layout-component@3.x.x/dist/aframe-layout-component.min.js"></script>
-    <script src="https://unpkg.com/aframe-event-set-component@3.x.x/dist/aframe-event-set-component.min.js"></script>
+    <title>Image Gallery WebXR Prototype</title>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js" ></script>
+
+    <!-- template component -->
+    <script src="https://unpkg.com/aframe-template-component@3/dist/aframe-template-component.min.js"></script>
+    <!-- layout component -->
+    <script src="https://unpkg.com/aframe-layout-component@5/dist/aframe-layout-component.min.js"></script>
+    <!-- event-set component -->
+    <script src="https://unpkg.com/aframe-event-set-component@5/dist/aframe-event-set-component.min.js"></script>
+    <!-- proxy-event component -->
+    <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
+
+    <script src="https://unpkg.com/aframe-proxy-event-component/dist/aframe-proxy-event-component.min.js"></script> 
+
+
 </head>
 
 <body>
 
     <a-scene>
         <a-assets>
+          <!-- Audio import-->
           <audio id="click-sound" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg" crossorigin="anonymous"></audio>
       
           <!-- Images. -->
@@ -26,7 +37,9 @@
           <img id="sechelt" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg" crossorigin="anonymous">
           <img id="sechelt-thumb" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/thumb-sechelt.jpg" crossorigin="anonymous">
 
-          <script id="menu" type="text/html">
+          <!--Template for the card-->
+
+          <script id="link" type="text/html">
             <a-entity class="link"
               geometry="primitive: plane; height: 1; width: 1"
               material="shader: flat; src: ${thumb}"
@@ -44,23 +57,20 @@
         animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
         animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade">
         </a-sky>
-
-  
-    
       
-        <!-- Link template we will build. -->
+        <!-- Outline of the card template we built above. -->
 
         <a-entity id="links" layout="type: line; margin: 1.5" position="-3 2 -4">
 
-            <a-entity template="src: #menu"
+            <a-entity template="src: #link"
             data-thumb=" #city-thumb"
             data-src = "#city"
             ></a-entity>
-            <a-entity template="src: #menu"
+            <a-entity template="src: #link"
             data-thumb=" #sechelt-thumb"
             data-src = "#sechelt"
             ></a-entity>
-            <a-entity template="src: #menu"
+            <a-entity template="src: #link"
             data-thumb=" #cubes-thumb"
             data-src = "#cubes"
             ></a-entity>
@@ -74,7 +84,11 @@
             id="cursor"
             animation__click="property: scale; from: 0.1 0.1 0.1; to: 1 1 1; easing: easeInCubic; dur: 150; startEvents: click"
             animation__clickreset="property: scale; to: 0.1 0.1 0.1; dur: 1; startEvents: animationcomplete__click"
-            animation__fusing="property: scale; from: 1 1 1; to: 0.1 0.1 0.1; easing: easeInCubic; dur: 150; startEvents: fusing"></a-cursor>
+            animation__fusing="property: scale; from: 1 1 1; to: 0.1 0.1 0.1; easing: easeInCubic; dur: 150; startEvents: fusing"
+            event-set__mouseenter="_event: mouseenter; color: springgreen"
+            event-set__mouseleave="_event: mouseleave; color: black"
+            raycaster="objects: .link"
+            ></a-cursor>
         </a-camera>
       </a-scene>
 
