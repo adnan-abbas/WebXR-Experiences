@@ -1,0 +1,105 @@
+<!-- This program will illustrate 
+1. Using the standard components that come with A-Frame.
+2. Using community components from the ecosystem.
+3. Writing custom components to accomplish whatever we want. -->
+
+<html>
+  <head>
+    <title>Image Gallery WebXR</title>
+    <script src="https://aframe.io/releases/0.7.0/aframe.min.js" ></script>
+    <script src="https://unpkg.com/aframe-template-component@3.x.x/dist/aframe-template-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-layout-component@3.x.x/dist/aframe-layout-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@3.x.x/dist/aframe-event-set-component.min.js"></script>
+</head>
+
+<body>
+
+    <a-scene>
+        <a-assets>
+          <audio id="click-sound" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg" crossorigin="anonymous"></audio>
+      
+          <!-- Images. -->
+          <img id="city" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/city.jpg" crossorigin="anonymous">
+          <img id="city-thumb" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/thumb-city.jpg" crossorigin="anonymous">
+          <img id="cubes" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/cubes.jpg" crossorigin="anonymous">
+          <img id="cubes-thumb" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/thumb-cubes.jpg" crossorigin="anonymous">
+          <img id="sechelt" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg" crossorigin="anonymous">
+          <img id="sechelt-thumb" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/thumb-sechelt.jpg" crossorigin="anonymous">
+
+          <script id="menu" type="text/html">
+            <a-entity class="link"
+              geometry="primitive: plane; height: 1; width: 1"
+              material="shader: flat; src: ${thumb}"
+              sound="on: click; src: #click-sound"
+              event-set__mouseenter="scale: 1.2 1.2 1"
+              event-set__mouseleave="scale: 1 1 1"
+              event-set__click="_target: #image-360; _delay: 300; material.src: ${src}"
+              proxy-event="event: click; to: #image-360; as: fade">
+            </a-entity>
+          </script>
+        </a-assets>
+      
+        <!-- 360-degree image. -->
+        <a-sky id="image-360" radius="10" src="#city"
+        animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
+        animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade">
+        </a-sky>
+
+  
+    
+      
+        <!-- Link template we will build. -->
+
+        <a-entity id="links" layout="type: line; margin: 1.5" position="-3 2 -4">
+
+            <a-entity template="src: #menu"
+            data-thumb=" #city-thumb"
+            data-src = "#city"
+            ></a-entity>
+            <a-entity template="src: #menu"
+            data-thumb=" #sechelt-thumb"
+            data-src = "#sechelt"
+            ></a-entity>
+            <a-entity template="src: #menu"
+            data-thumb=" #cubes-thumb"
+            data-src = "#cubes"
+            ></a-entity>
+
+        </a-entity>
+
+      
+        <!-- Camera + Cursor. -->
+        <a-camera>
+          <a-cursor
+            id="cursor"
+            animation__click="property: scale; from: 0.1 0.1 0.1; to: 1 1 1; easing: easeInCubic; dur: 150; startEvents: click"
+            animation__clickreset="property: scale; to: 0.1 0.1 0.1; dur: 1; startEvents: animationcomplete__click"
+            animation__fusing="property: scale; from: 1 1 1; to: 0.1 0.1 0.1; easing: easeInCubic; dur: 150; startEvents: fusing"></a-cursor>
+        </a-camera>
+      </a-scene>
+
+</body>
+
+
+
+</html>
+
+
+      <!-- <script>
+                AFRAME.registerComponent('audiohandler', {
+                    init:function() {
+                    let playing = false;
+                    let audio = document.querySelector("#audio");
+                    this.el.addEventListener('click', () => {
+                            if(!playing) {
+                                audio.play();
+                            } else {
+                                audio.pause();
+                                audio.currentTime = 0;
+                            }
+                            playing = !playing;
+                    });
+                    }
+                })
+
+        </script> -->
