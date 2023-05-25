@@ -1,8 +1,14 @@
 # WebXR-Experiences
 
-In this repository, I will be maintaining the resources of how to create WebXR experiences. 
+In this repository, I have shared my code examples on creating VR experiences on the Web using the WebXR API and A-Frame.
 
-## 360 Image Gallery
+## WebXR Starter App
+
+
+## A-Frame Topics
+
+
+### Building a car from primitives
 
 This WebXR application is built using A-Frame. It demonstrated the use of the following features in A-Frame:
 
