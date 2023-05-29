@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>WebXR</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+
+            var xrReferenceSpace = null;
+            var glContext = null;
+            var xrSession= null;
+            var exitShown = false;
+
+
+            window.onload = function()
+            {
+                initializeXR();
+            }
+            async function initializeXR()
+            {
+                var sessionType = 'inline';
+                if ("xr" in window.navigator){
+                    alert("WebXR is supported");
+                }
+                else{
+                    alert("WebXR is not supported")
+                }
+                //checks what session type is supported
+                window.navigator.xr.isSessionSupported(sessionType).then(
+                (supported) => {
+                    if (supported){
+                        console.log("This session type is supported")
+                        beginXRSession(sessionType);
+
+                    }
+                    if (!supported)
+                    {
+                        console.log("This session type is not supported")
+                        sessionType = 'inline';
+                    }  
+                }
+                )   
+            }
+
+            async function beginXRSession(sessionType)
+            {
+                //first creating a canvas & WebGL context that is compatible with the XR device
+                //1. Set the xrCompatible key to true in the WebGLContextCreationAttributes
+                //2. Call makeXRCompatible on the context AFTER it is created                
+                //Then, create a new WebGL Layer passing in the GLContext and XRSession      
+                
+                let glCanvas = document.createElement('canvas');
+                glContext = glCanvas.getContext('webgl',{
+                    xrCompatible: true
+                })
+
+                xrSession = await navigator.xr.requestSession(sessionType);
+                let xrLayer = new XRWebGLLayer(xrSession,glContext);
+                //The layer is the source of the content for the XRSession.updateRendetState() function
+                xrSession.updateRenderState({baseLayer:xrLayer});
+                console.log(xrSession);
+
+                xrReferenceSpace = await xrSession.requestReferenceSpace("viewer");
+                //requesting the first animation frame
+                xrSession.requestAnimationFrame(updateXREnvironment);
+            }
+
+            function updateXREnvironment(timestamp,frame)
+            {
+                // ending session button
+                if (!exitShown){
+                    var exitXrBtn = document.createElement("button");
+                    exitXrBtn.innerHTML = "Exit XR";
+                    exitXrBtn.addEventListener("click", exitXRSession);
+                    document.body.appendChild(exitXrBtn);
+                    exitShown = true;
+
+                }
+                
+
+
+                let session = frame.session;
+                document.title =  'Frame ' + timestamp;
+                //Get the XR device pose relative to the reference space requested earlier
+                let pose = frame.getViewerPose(xrReferenceSpace);
+                if (!pose)
+                {
+                    return;
+                }
+                //Ensuring that we render to the layer's buffer
+                let glLayer = frame.session.renderState.baseLayer;
+                glContext.bindFramebuffer(glContext.FRAMEBUFFER, glLayer.framebuffer);
+                //Looping through all of the views
+                for (let view of pose.views)
+                {
+                    //Setting viewpoert of each view extracted
+                    let viewport = glLayer.getViewport(view);
+                    glContext.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
+                    glContext.clearColor(1,0,0,1);
+                    glContext.clearDepth(1.0); // Clear everything
+                    glContext.clear(glContext.COLOR_BUFFER_BIT | glContext.DEPTH_BUFFER_BIT);
+                }
+                //recursive call to keep the render loop going
+                session.requestAnimationFrame(updateXREnvironment);
+
+            }
+            function exitXRSession()
+            {
+                //Do we have an active session?
+                if (xrSession)
+                {
+                    xrSession.end().then(endSession);
+                }
+
+            }
+
+            function endSession()
+            {
+                gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+                xrSession = null;
+                // Ending the session stops executing callbacks passed to the XRSession's
+                // requestAnimationFrame(). To continue rendering, use the window's
+                // requestAnimationFrame() function.
+                window.requestAnimationFrame(onXRFrame);
+            }
+        </script>
+    </body>
+ </html>
