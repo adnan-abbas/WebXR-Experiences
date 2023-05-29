@@ -1,0 +1,93 @@
+<html>
+
+    <head>
+      <title>
+          Sound-Lesson
+      </title>
+      <script src="https://aframe.io/releases/1.4.0/aframe.min.js">  
+      </script>
+      <script>
+
+        AFRAME.registerComponent('play',{
+          init:function(){
+            var myEl = document.querySelector('#car');
+            this.el.addEventListener('click', function(){
+              myEl.components.sound.playSound();
+              myEl.setAttribute('animation',{enabled:'true',property: 'position',from:' 1 -250 -4', to: '1 -250 -10', dur: '5000', easing: 'linear', loop: 'true'});
+            })
+
+          }
+        });
+
+        AFRAME.registerComponent('pause',{
+          init:function(){
+            var myEl = document.querySelector('#car');
+            this.el.addEventListener('click', function(){
+              myEl.components.sound.pauseSound();
+              myEl.setAttribute('animation',{enabled: 'false'});
+            })
+          }
+        });
+      </script>
+    </head>
+  
+    <body>
+   
+        <a-scene>
+          <a-assets>
+            <img id="body" src="car-texture.jpg"></img>
+            <img id="sky" src="city.jpg"></img>
+            <audio id="positional-sound" src="car-ignition-exterior-a.wav" preload="auto"></audio>
+            <img id="play" src="play.png"></img>
+            <img id="pause" src="pause.png"></img>
+          </a-assets>
+
+          <a-sky src = "#sky" rotation="0 90 0">
+          </a-sky>
+
+
+          <!-- Car -->
+          <a-entity id="car" position= "1 -250 -4" rotation = "0 70 0" sound="src:#positional-sound; loop:true ">
+          <a-box id="body-1" position="0 0 -2" height="0.05" width="1.5" depth="0.75" material = "src:#body">
+          </a-box>
+          <a-box id="body-2" position="0 -0.75 -2" height="0.05" width="1.5" depth="0.75" material = "src:#body">
+          </a-box>
+          <a-box id="body-3"  position="0 -0.4 -1.65" rotation="90 0 0" height="0.05" width="1.5" depth="0.75"material = "src:#body">
+          </a-box>
+          <a-box id = "body-4" position="0 -0.4 -2.35" rotation="90 0 0" height="0.05" width="1.5" depth="0.75"material = "src:#body">
+          </a-box>
+          <a-box id="windshield" position="1 -0.25 -2" rotation="0 0 140" height="0.05" width="0.75" depth="0.75"material = "src:#body">
+          </a-box>
+          <a-box id="bonnet"  position="1.25 -0.6275 -2" scale="1 0.3 0.74211"material = "src:#body" >
+          </a-box>
+          <a-box id="back"  position="-0.7275 -0.375 -2" rotation="0 0 90" height="0.05" width="0.8" depth="0.75" material = "src:#body">
+          </a-box>
+          <a-entity id="headlight 1" light="color: #e3b716; distance: 0.2; intensity: 10; type: point" rotation="" position="1.92549 -0.63432 -1.79418"></a-entity>
+          <a-entity id="headlight 2" light="color: #e3b716; distance: 0.2; intensity: 10; type: point" rotation="" position="1.925 -0.634 -2.21319"></a-entity>
+          <a-entity id="headlight illum" light="color: #e3b716; intensity: 6; type: spot; angle: 20" rotation="0 -90 0" position="1.925 -0.634 -1.8"></a-entity>
+          <a-entity id="headlight illum-2" light="color: #e3b716; intensity: 6; type: spot; angle: 20" rotation="0 -90 0" position="1.925 -0.634 -2.23"></a-entity>
+          <a-cylinder id="wheel1" color="#444444" rotation="90 0 0" scale="0.15 0.15 0.15" position="1.251 -0.8765 -1.7219"> </a-cylinder>
+          <a-cylinder id="wheel2" color="#444444" rotation="90 0 0" scale="0.15 0.15 0.15" position="-0.448 -0.87162 -1.71224"></a-cylinder>
+          <a-cylinder id="wheel3" color="#444444" rotation="90 0 0" scale="0.15 0.15 0.15" position="-0.448 -0.87162 -2.2753"></a-cylinder>
+          <a-cylinder id="wheel4" color="#444444" rotation="90 0 0" scale="0.15 0.15 0.15" position="1.242 -0.8698 -2.2624"></a-cylinder>
+          </a-entity>
+
+          <!--Directional Light-->
+          <a-entity light="color: #ffffff" position="-0.30451 3.222 3.95996"></a-entity>
+
+          <!--Sound Controls-->
+          <a-image src="#play" position= "-0.4 -249 -4" scale = "0.5 0.5 0.5" play> </a-image>
+          <a-image src="#pause" position= "0.4 -249 -4" scale = "0.5 0.5 0.5" pause> </a-image>
+
+
+    
+          <a-entity position = "0 -250 0">
+          <a-camera >
+            <a-cursor>
+            </a-cursor>
+          </a-camera>
+          </a-entity>
+    
+        </a-scene>
+    </body>
+  </html>
