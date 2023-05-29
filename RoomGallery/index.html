@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+	<title>Room Upwork Example</title>
+	<script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="highlight.js"></script>
+    <script src="info-panel.js"></script>
+</head>
+ 
+<body>
+	<a-scene background="color: #00000A">
+		<!-- ASSET MANAGEMENT SYSTEM -->
+		<a-assets>
+            <a-asset-item id="room"src="https://cdn.glitch.global/65bb73ee-5be4-4205-9890-86f68226bc5a/room.glb"></a-asset-item>
+            <img id="kazetachinu" src="https://cdn.aframe.io/examples/ui/kazetachinu.jpg" crossorigin="anonymous"/>
+            <img id="kazetachinuPoster" src="https://cdn.aframe.io/examples/ui/kazetachinuPoster.jpg" crossorigin="anonymous"/>  
+            
+            <a-mixin
+            id="frame"
+            geometry="primitive: plane; width: 0.5783552; height: 0.8192"
+            material="color: white; shader: flat"
+            animation__scale="property: scale; to: 1.2 1.2 1.2; dur: 200; startEvents: mouseenter"
+            animation__scale_reverse="property: scale; to: 1 1 1; dur: 200; startEvents: mouseleave"
+           ></a-mixin>
+
+           <a-mixin
+           id="poster"
+           geometry="primitive: plane; width: 0.544768; height: 0.786432"
+           material="color: white; shader: flat"
+           material="shader: flat"
+           position="0 0 0.005"
+          ></a-mixin>
+
+          <a-mixin
+           id="movieImage"
+           geometry="primitive: plane; width: 1.5; height: 0.81"
+           material="src: #ponyo; shader: flat; transparent: true"
+           position="0 0.495 0.002"
+          ></a-mixin>
+        
+        </a-assets>
+
+
+        <a-entity gltf-model="#room">
+        </a-entity>
+
+
+        <a-entity id="menu" position="-10 4 2" scale="3 3 3" rotation="0 90 0">
+            <a-entity id="karigurashiButton" position="-0.8 0 0" mixin="frame">
+              <a-entity material="src: #kazetachinuPoster;" mixin="poster"></a-entity>
+            </a-entity>
+        </a-entity>
+        
+        <a-entity
+        id="infoPanel"
+        position="-8 4 3"
+        rotation="0 90 0"
+        info-panel
+        visible="false"
+        scale="2 2 2"
+        geometry="primitive: plane; width: 1.5; height: 1.8"
+        material="color: #333333; shader: flat; transparent: false" class="raycastable">
+
+        <a-entity id="kazetachinuMovieImage" mixin="movieImage" material="src: #kazetachinu" visible="false"></a-entity>
+        
+        <a-entity id="movieTitle"
+          position="-0.68 -0.1 0"
+          text="shader: msdf; anchor: left; width: 1.5; font: https://cdn.aframe.io/examples/ui/Viga-Regular.json; color: white; value: Ponyo (2003)">
+        </a-entity>
+
+        <a-entity id="movieDescription"
+          position="-0.68 -0.2 0"
+          text="baseline: top; shader: msdf; anchor: left; font: https://cdn.aframe.io/examples/ui/Viga-Regular.json; color: white; value: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
+        </a-entity>
+
+      </a-entity>
+    </a-entity>
+
+
+		<!-- Camera rig -->
+		<a-entity id="cameraRig" position="0 0 12">
+			<!-- Camera -->
+			<a-camera id="camera">
+				<a-cursor></a-cursor>
+			</a-camera>
+		</a-entity>
+	</a-scene>
+</body>
+</html>
